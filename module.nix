@@ -101,7 +101,7 @@ matugen: {
   colors = let
     base16 = (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).base16;
   in
-    (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).colors ++ base16;
+    (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).colors // base16;
 in {
   options.programs.matugen = {
     enable = lib.mkEnableOption "Matugen declarative theming";
