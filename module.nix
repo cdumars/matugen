@@ -98,6 +98,7 @@ matugen: {
       > $out/theme.json
   '');
   colors = (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).colors;
+  colors.base16 = (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).base16;
 in {
   options.programs.matugen = {
     enable = lib.mkEnableOption "Matugen declarative theming";
@@ -137,7 +138,10 @@ in {
               type = either str (listOf str);
               description = "Path where the generated file will be written to";
               example = "~/.config/sytle.css";
-              apply = val: if lib.isList val then val else [val];
+              apply = val:
+                if lib.isList val
+                then val
+                else [val];
             };
             pre_hook = lib.mkOption {
               type = str;
