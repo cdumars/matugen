@@ -98,10 +98,9 @@ matugen: {
       > $out/theme.json
   '');
   # include base16 colors
-  colors = let
-    base16 = (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).base16;
-  in
-    (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).colors // base16;
+  colors =
+    (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).colors;
+  base16 = (builtins.fromJSON (builtins.readFile "${themePackage}/theme.json")).base16;
 in {
   options.programs.matugen = {
     enable = lib.mkEnableOption "Matugen declarative theming";
@@ -280,6 +279,19 @@ in {
           then colors
           else osCfg.theme.colors
         else colors;
+      description = "Generated theme colors. Includes all variants.";
+    };
+
+    theme.base16 = lib.mkOption {
+      inherit (pkgs.formats.json {}) type;
+      readOnly = true;
+      default =
+        if builtins.hasAttr "templates" osCfg
+        then
+          if cfg.templates != osCfg.templates
+          then base16
+          else osCfg.theme.base16
+        else base16;
       description = "Generated theme colors. Includes all variants.";
     };
   };
